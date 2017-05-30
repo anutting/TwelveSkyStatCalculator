@@ -9,6 +9,10 @@ import javafx.collections.ObservableList;
 import player.exception.FullStatPointsException;
 import player.exception.NoAvailableStatPointsException;
 
+
+//base class for the three different types of players.
+//Stores all of the constant values and player attributes
+//most of the business logic is handled here based on the instance of Player
 public class Player {
 	
 		public enum Weapon {OFFENSIVE,DEFENSIVE,RANGED};
@@ -73,7 +77,7 @@ public class Player {
 			setWeapon(Weapon.OFFENSIVE);
 		}
 		
-		
+		//only retrieves the values needed for all types of players. overloaded in subclasses to retrieve info needed for that particular player
 		protected void pullValuesFromCSV() throws IOException{
 			defenseValues = new String[MAX_LEVEL];
     		expValues = new String[MAX_LEVEL];
@@ -285,17 +289,6 @@ public class Player {
 				}
 			}
 			
-			if(this instanceof Guanyin){
-				
-			}
-			
-			if(this instanceof Fujin){
-				
-			}
-			if(this instanceof Jinong){
-				
-			}
-			
 			this.level = level;
 			setStatPoints(statPoints);
 			setMaxStatPoints(statPoints);
@@ -306,9 +299,6 @@ public class Player {
 			setHp(getHpByLevel(level));
 			setChi(getChiByLevel(level));
 			setDefense(getDefenseByLevel(level));
-			
-			
-			//to be overrided in child to account for change in stats at change in level
 		}
 
 		public int getVit() {
@@ -507,6 +497,11 @@ public class Player {
 		protected int getDefenseByLevel(int level){
 			int index = level - 1;
 			return Integer.parseInt(defenseValues[index]);
+		}
+		
+		public int getExp(){
+			int index = level - 1;
+			return Integer.parseInt(expValues[index]);
 		}
 		
 }

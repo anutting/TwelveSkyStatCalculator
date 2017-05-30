@@ -62,6 +62,7 @@ public class BootCalc extends Application {
 	private final TextField hitRate = new TextField();
 	private final TextField dodge = new TextField();
 	private final TextField element = new TextField();
+	private final TextField exp = new TextField();
 	//labels
 	private final Label Title = new Label(title);
 	private final Label statPoints = new Label();
@@ -72,6 +73,7 @@ public class BootCalc extends Application {
 	private final Label Dodge = new Label("Dodge");
 	private final Label HitRate = new Label("Hit Rate");
 	private final Label ele = new Label("Element");
+	private final Label expNeeded = new Label("Experience");
 	//Objects
 	Player character;
 
@@ -315,12 +317,17 @@ public class BootCalc extends Application {
     	//row 4
     	HBox row4 = new HBox();
     	VBox eleBox = new VBox();
+    	VBox expBox = new VBox();
     	
     	element.setEditable(false);
     	eleBox.getChildren().addAll(ele,element);
     	eleBox.setPrefWidth(90);
     	
-    	row4.getChildren().add(eleBox);
+    	exp.setEditable(false);
+    	expBox.getChildren().addAll(expNeeded,exp);
+    	expBox.setPrefWidth(90);
+    	
+    	row4.getChildren().addAll(eleBox,expBox);
     	row4.setSpacing(10);
     	
     	statsDisplay.getChildren().addAll(row1,row2,row3,row4);
@@ -339,6 +346,7 @@ public class BootCalc extends Application {
 		hitRate.setText(df.format(character.getHitRate()));
 		element.setText(Integer.toString(character.getEleDamage()));
 		ele.setText(character.getEleType());
+		exp.setText(Integer.toString(character.getExp()));
 		
 		chiPoints.setText( Integer.toString(character.getChiPoints()) );
     	vitPoints.setText( Integer.toString(character.getVit()) );
