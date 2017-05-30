@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.*;
 import javafx.geometry.Insets;
 import javafx.event.*;
@@ -14,7 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import player.*;
 import player.exception.FullStatPointsException;
 import player.exception.NoAvailableStatPointsException;
@@ -22,8 +25,12 @@ import player.exception.NoAvailableStatPointsException;
 public class BootCalc extends Application {
 	//window
 	private final GridPane grid = new GridPane();
-	Scene scene = new Scene(new Group(), 220, 410); //500,320
+	Scene scene = new Scene(new Group(), 220, 420); //500,320
 	DecimalFormat df = new DecimalFormat("#");
+	private double xOffset = 0;
+    private double yOffset = 0;
+    Stage mainStage;
+    String title = "TS1 Stat Calculator";
 	//layout
 	private final HBox menuBox = new HBox();
 	private final VBox statsDisplay = new VBox();
@@ -38,6 +45,7 @@ public class BootCalc extends Application {
 	private final Button btnSubVit = new Button();
 	private final Button btnSubChi = new Button();
 	private final Button btnBloodClear = new Button();
+	private final Button btnClose = new Button("X");
 	//boxes
 	private final ChoiceBox<String> cbLevel = new ChoiceBox<String>();
 	private final ChoiceBox<String> cbFaction = new ChoiceBox<String>();
@@ -55,40 +63,50 @@ public class BootCalc extends Application {
 	private final TextField dodge = new TextField();
 	private final TextField element = new TextField();
 	//labels
+	private final Label Title = new Label(title);
 	private final Label statPoints = new Label();
-	Label HP = new Label("HP");
-	Label CHI = new Label("CHI");
-	Label Defense = new Label("Defense");
-	Label Damage = new Label("Damage");
-	Label Dodge = new Label("Dodge");
-	Label HitRate = new Label("Hit Rate");
-	Label ele = new Label("Element");
+	private final Label HP = new Label("HP");
+	private final Label CHI = new Label("CHI");
+	private final Label Defense = new Label("Defense");
+	private final Label Damage = new Label("Damage");
+	private final Label Dodge = new Label("Dodge");
+	private final Label HitRate = new Label("Hit Rate");
+	private final Label ele = new Label("Element");
 	//Objects
 	Player character;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+    	mainStage = primaryStage;
     	character = new Player();
-    
+    	
+    	btnClose.setId("btnClose");
+    	btnBloodClear.setId("btnBloodClear");
+    	cbLevel.setId("cbLevel");
+    	
     	grid.setHgap(10);
        	grid.setVgap(10);
-        grid.setPadding(new Insets(5,10,5,10));
+        grid.setPadding(new Insets(0,10,15,10));
         
         buildStatsDisplay();
         buildMenuBox();
         buildStatBox();
+        
+        HBox titleBar = new HBox();
+        titleBar.setSpacing(60);
+        titleBar.getChildren().addAll(Title,btnClose);
+        
         VBox rows = new VBox();
         rows.setSpacing(5);
         rows.setPrefWidth(200);
         statsBox.setSpacing(10);
-        rows.getChildren().addAll(menuBox,statPoints,statsBox,statsDisplay);
-        grid.add(rows,0,0);
+        rows.getChildren().addAll(titleBar,menuBox,statPoints,statsBox,statsDisplay);
+        grid.add(rows,0,1);
         
     	//set events
         cbFaction.setOnAction(onFactionChange);
         cbLevel.setOnAction(onLevelChange);
         cbWeapon.setOnAction(onWeaponChange);
-        
         btnSubStr.setOnAction(subStatHandler);
         btnSubDex.setOnAction(subStatHandler);
         btnSubVit.setOnAction(subStatHandler);
@@ -97,23 +115,27 @@ public class BootCalc extends Application {
         btnAddDex.setOnAction(addStatHandler);
         btnAddVit.setOnAction(addStatHandler);
         btnAddChi.setOnAction(addStatHandler);
-        
+        btnClose.setOnAction(onClose);
         btnBloodClear.setOnAction(onBloodClear);
+        scene.setOnMousePressed(onDrag);
+        scene.setOnMouseDragged(onEndDrag);
         
         //preselect boxes and trigger the above events
         cbFaction.getSelectionModel().select(0);
         cbLevel.getSelectionModel().select(0);
         cbWeapon.getSelectionModel().select(0);
         
-        //establish the grid
+        
         Group root = (Group)scene.getRoot();
         root.getChildren().add(grid);
         
-        primaryStage.setTitle("TwelveSky Stat Calculator");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.sizeToScene();
-        primaryStage.show();
+        mainStage.setTitle(title);
+        mainStage.setScene(scene);
+        scene.getStylesheets().add(BootCalc.class.getResource("style.css").toExternalForm());
+        mainStage.initStyle(StageStyle.UNDECORATED);
+        mainStage.setResizable(false);
+        mainStage.sizeToScene();
+        mainStage.show();
     }
     
     public static void main(String[] args) {
@@ -121,6 +143,8 @@ public class BootCalc extends Application {
     }
     
     private void buildStatBox(){
+    	
+    	//builds the box that allows for allocating and removing stat points
     	
     	VBox left = new VBox();
     	VBox right = new VBox();
@@ -191,8 +215,9 @@ public class BootCalc extends Application {
      	statsBox.getChildren().addAll(left,right);
     	
     }
-    
     private void buildMenuBox(){
+    	
+    	//builds the box that allows the user to choose some options
     	
     	menuBox.setPadding(new Insets(0,10,0,0));
     	menuBox.setSpacing(10);
@@ -227,7 +252,7 @@ public class BootCalc extends Application {
     	VBox left = new VBox();
     	VBox right = new VBox();
     	
-    	right.setSpacing(17);
+    	right.setSpacing(15);
     	
     	left.getChildren().addAll(vbFaction,vbLevel);
     	right.getChildren().addAll(vbWeapon,btnBloodClear);
@@ -236,12 +261,9 @@ public class BootCalc extends Application {
         menuBox.getChildren().addAll(left,right);
     	
     }
-  
-   
-    
     public void buildStatsDisplay(){
     
-    	
+    	//builds the box that shows the player's calculated stats
     	
     	//row 1
     	HBox row1 = new HBox();
@@ -305,8 +327,9 @@ public class BootCalc extends Application {
     	statsDisplay.setSpacing(7);
     	
     }
-    
     private void refreshFields(){
+    	
+    	//pulls the data from the character class and populates the controls
     	
 		hp.setText(df.format((character.getHp())));
 		chi.setText(df.format((character.getChi())));
@@ -330,6 +353,8 @@ public class BootCalc extends Application {
     	
 		@Override
 		public void handle(ActionEvent event) {
+			
+			//when a player changes his factions, a new character is made in that faction and their previous stats are carried over and converted
 			
 			String selectedValue = cbFaction.getValue();
 			switch(selectedValue){
@@ -362,15 +387,16 @@ public class BootCalc extends Application {
 				}
 			}
 			refreshFields();
-			character.printPlayerInfo();
+			//character.printPlayerInfo();
 		}
     	
     };
-    
     private EventHandler<ActionEvent> onLevelChange = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent event) {
+			
+			//when a level is changed, the character is set to that level and a new character is created based on the faction
 			
 			Integer selectedLevel = cbLevel.getSelectionModel().getSelectedIndex() +1;
 			
@@ -411,12 +437,13 @@ public class BootCalc extends Application {
 		}
     	
     };
-    
-
     private EventHandler<ActionEvent> addStatHandler = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent event) {
+			
+			//add to the stat points based on the button clicked
+			
 			Button source = (Button)event.getSource();
 			String stat = source.getId();
 			try{
@@ -451,11 +478,13 @@ public class BootCalc extends Application {
 		}
     	
     };
-    
     private EventHandler<ActionEvent> subStatHandler = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent event) {
+			
+			//subtract from the stat points based on the button clicked
+			
 			Button source = (Button)event.getSource();
 			String stat = source.getId();
 			try{
@@ -491,11 +520,13 @@ public class BootCalc extends Application {
 			
     	
     };
-    
     private EventHandler<ActionEvent> onWeaponChange = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent event) {
+			
+			//change the character's weapon 
+			
 			String wep = cbWeapon.getValue();
 			
 			switch(wep){
@@ -514,18 +545,17 @@ public class BootCalc extends Application {
 				
 			}
 			
-			
-			
 			refreshFields();
 			
 		}
     	
     };
-    
     private EventHandler<ActionEvent> onBloodClear = new EventHandler<ActionEvent>(){
 
 		@Override
 		public void handle(ActionEvent event) {
+			
+			//resets the character's stats by setting the level to their current level.
 			
 			character.setLevel(character.getLevel());
 			
@@ -534,6 +564,31 @@ public class BootCalc extends Application {
 		}
     	
     };
-    
+    private EventHandler<ActionEvent> onClose = new EventHandler<ActionEvent>() {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+        	
+        	//handle closing of the program since i removed the default top bar
+        	
+            Platform.exit();
+        }
+    };
+    private EventHandler<MouseEvent> onDrag = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+        	//handle moving of the program since i removed the default top bar
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        }
+    };
+    private EventHandler<MouseEvent> onEndDrag = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+        	//handle moving of the program since i removed the default top bar
+        	mainStage.setX(event.getScreenX() - xOffset);
+            mainStage.setY(event.getScreenY() - yOffset);
+        }
+    };
 
 }

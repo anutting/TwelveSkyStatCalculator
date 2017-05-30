@@ -1,0 +1,45 @@
+GridPane{
+	-fx-font-family:Arial;
+	-fx-background-color: black;
+}
+
+Label{
+	-fx-text-fill: #E29100;
+}
+Button{
+	-fx-border:black;
+	-fx-background-color: black;
+	-fx-text-fill: red;
+	-fx-border-color:white;
+}
+
+ChoiceBox{
+	-fx-background-color: black;
+	-fx-border-color:white;
+	-fx-text-fill: white;
+}
+#cbLevel{
+	-fx-font-color: white;
+	-fx-color-label-visible:true;
+}
+
+#btnClose{
+	-fx-text-fill: red;
+	-fx-background-color: black;
+	-fx-border-color:black;
+}
+
+#btnClose:hover{
+	-fx-background-color:red;
+	-fx-text-fill:black;
+	
+}
+
+#btnBloodClear{
+	-fx-text-fill: #E29100;
+}
+TextField{
+	-fx-background-color:black;
+	-fx-text-fill:white;
+	-fx-border-color:white;
+}
