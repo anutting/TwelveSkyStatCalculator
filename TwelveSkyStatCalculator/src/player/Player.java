@@ -19,23 +19,23 @@ public class Player {
 		
 		protected final int MAX_LEVEL = 145;
 		protected String faction;
-		protected int level;
-		protected int statPoints;
-		protected int maxStatPoints;
-		protected int vit;
-		protected int dex;
-		protected int chiPoints;
-		protected int str;
-		protected int defense;
-		protected Double damage;
-		protected Double dodge;
-		protected Double hp;
-		protected Double chi;
-		protected Double hitRate;
-		protected int hpElixers;
-		protected int chiElixers;
-		protected int eleDamage;
-		protected String eleType;
+		private int level;
+		private int statPoints;
+		private int maxStatPoints;
+		private int vit;
+		private int dex;
+		private int chiPoints;
+		private int str;
+		private int defense;
+		private Double damage;
+		private Double dodge;
+		private Double hp;
+		private Double chi;
+		private Double hitRate;
+		private int hpElixers;
+		private int chiElixers;
+		private int eleDamage;
+		private String eleType;
 		
 		//constant values representing stats pulled from a csv.
 		//level = index + 1;
@@ -271,19 +271,7 @@ public class Player {
 				if(i < 99){
 					statPoints += 5;
 				}
-				if(i > 99 && i < 113){
-					if(this instanceof Guanyin){
-						addEleDamage(42);
-					}
-					
-					if(this instanceof Fujin){
-						addEleDamage(40);
-					}
-					if(this instanceof Jinong){
-						addEleDamage(45);
-					}
-					//ele dmg,hp,chi
-				}
+
 				if(i > 112){
 					statPoints += 30;
 				}
@@ -483,13 +471,13 @@ public class Player {
 		}
 		
 		
-		protected Double getHpByLevel(int level){
+		public Double getHpByLevel(int level){
 			int index = level - 1;
 			return Double.parseDouble(baseHpValues[index]);
 			
 		}
 		
-		protected Double getChiByLevel(int level){
+		public Double getChiByLevel(int level){
 			int index = level - 1;
 			return Double.parseDouble(baseChiValues[index]);
 		}

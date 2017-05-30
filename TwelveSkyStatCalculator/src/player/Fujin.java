@@ -12,6 +12,14 @@ public class Fujin extends Player {
 		super();
 		setFaction("Fujin");
 		setEleType("Shadow");
+		setBaseDmg(51);
+		setHpPerPoint(14.29);
+		setChiPerPoint(17.14);
+		setOffenseDmgPerPoint(3.1700001);
+		setDefenseDmgPerPoint(2.71);
+		setRangeDmgPerPoint(2.9400001);
+		setHitRatePerPoint(4.5700002);
+		setDodgePerPoint(2.29);
 	}
 	
 	public Fujin(Player p) throws IOException{
@@ -22,23 +30,14 @@ public class Fujin extends Player {
 			System.out.println(e.getMessage());
 		}
 		setLevel(p.getLevel());
-		setVit(p.getVit());
-		setDex(p.getDex());
-		setStr(p.getStr());
+		setVit(1);
+		setDex(1);
+		setStr(1);
 		setStatPoints(p.getStatPoints());
-		setChiPoints(p.getChiPoints());
+		setChiPoints(1);
 		setWeapon(p.getWeapon());
-		setBaseDmg(51);
-		setHpPerPoint(14.29);
-		setChiPerPoint(17.14);
-		setOffenseDmgPerPoint(3.1700001);
-		setDefenseDmgPerPoint(2.71);
-		setRangeDmgPerPoint(2.9400001);
-		setHitRatePerPoint(4.5700002);
-		setDodgePerPoint(2.29);
 		setDamage(getDamage());
-		
-		//calc dmg, dodge, hit rate
+		setEleDamage(getShadowDmgByLevel(p.getLevel()));
 	}
 	
 	@Override
@@ -64,7 +63,10 @@ public class Fujin extends Player {
 	        reader.close();
 		}
 	}
-
+	public int getShadowDmgByLevel(int level){
+		int index = level - 1;
+		return Integer.parseInt(shadowDamage[index]);
+	}
 	
 
 }

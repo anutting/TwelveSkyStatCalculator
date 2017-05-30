@@ -280,7 +280,7 @@ public class BootCalc extends Application {
     	chiBox.setPrefWidth(90);
     	
     	row1.getChildren().addAll(hpBox,chiBox);
-    	row1.setSpacing(10);
+    	row1.setSpacing(15);
     	
     	//row 2
     	HBox row2 = new HBox();
@@ -296,7 +296,7 @@ public class BootCalc extends Application {
     	defBox.setPrefWidth(90);
     	
     	row2.getChildren().addAll(dmgBox,defBox);
-    	row2.setSpacing(10);
+    	row2.setSpacing(15);
     	
     	//row 3
     	HBox row3 = new HBox();
@@ -312,7 +312,7 @@ public class BootCalc extends Application {
     	dodgeBox.setPrefWidth(90);
     	
     	row3.getChildren().addAll(hitRateBox,dodgeBox);
-    	row3.setSpacing(10);
+    	row3.setSpacing(15);
     	
     	//row 4
     	HBox row4 = new HBox();
@@ -328,7 +328,7 @@ public class BootCalc extends Application {
     	expBox.setPrefWidth(90);
     	
     	row4.getChildren().addAll(eleBox,expBox);
-    	row4.setSpacing(10);
+    	row4.setSpacing(15);
     	
     	statsDisplay.getChildren().addAll(row1,row2,row3,row4);
     	statsDisplay.setSpacing(7);

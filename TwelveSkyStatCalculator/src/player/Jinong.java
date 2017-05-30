@@ -12,6 +12,14 @@ public class Jinong extends Player {
 		super();
 		setFaction("Jinong");
 		setEleType("Dark");
+		setBaseDmg(87);
+		setHpPerPoint(16.33);
+		setChiPerPoint(22.29);
+		setOffenseDmgPerPoint(5.6100001);
+		setDefenseDmgPerPoint(5.3899999);
+		setRangeDmgPerPoint(5.1700001);
+		setHitRatePerPoint(5.71);
+		setDodgePerPoint(2.8599999);
 	}
 	public Jinong(Player p) throws IOException{
 		this();
@@ -21,21 +29,14 @@ public class Jinong extends Player {
 			System.out.println(e.getMessage());
 		}
 		setLevel(p.getLevel());
-		setVit(p.getVit());
-		setDex(p.getDex());
-		setStr(p.getStr());
-		setChiPoints(p.getChiPoints());
+		setVit(1);
+		setDex(1);
+		setStr(1);
+		setChiPoints(1);
 		setStatPoints(p.getStatPoints());
 		setWeapon(p.getWeapon());
-		setBaseDmg(87);
-		setHpPerPoint(16.33);
-		setChiPerPoint(22.29);
-		setOffenseDmgPerPoint(5.6100001);
-		setDefenseDmgPerPoint(5.3899999);
-		setRangeDmgPerPoint(5.1700001);
-		setHitRatePerPoint(5.71);
-		setDodgePerPoint(2.8599999);
 		setDamage(getDamage());
+		setEleDamage(getDarkDmgByLevel(p.getLevel()));
 	}
 	
 	@Override
@@ -61,4 +62,10 @@ public class Jinong extends Player {
 	        reader.close();
 		}
 	}
+	
+	public int getDarkDmgByLevel(int level){
+		int index = level - 1;
+		return Integer.parseInt(darkDamage[index]);
+	}
+
 }
